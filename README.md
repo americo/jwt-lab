@@ -24,6 +24,21 @@ npm install
 npm start
 ```
 
+## Available Endpoints
+
+### Public Key
+- `GET /public.pem` - Returns the public key used for RS256 verification
+
+### Authentication
+- `POST /login` - Login with username/password (HS256)
+- `POST /rs256-login` - Login with username/password (RS256)
+- `POST /kid-login` - Login with username/password (KID)
+
+### Protected Routes
+- `GET /protected` - Protected route (vulnerable to "none" algorithm)
+- `GET /rs256-protected` - Protected route (vulnerable to algorithm confusion)
+- `GET /kid-protected` - Protected route (vulnerable to KID injection)
+
 ## Testing the Vulnerabilities
 
 ### 1. "none" Algorithm Vulnerability
@@ -59,8 +74,14 @@ curl http://localhost:3000/protected \
 
 ### 2. RS256 to HS256 Algorithm Confusion
 
+#### Get the Public Key
+First, download the public key:
+```bash
+curl http://localhost:3000/public.pem -o public.pem
+```
+
 #### Get a Valid RS256 Token
-First, get a valid RS256 JWT token:
+Get a valid RS256 JWT token:
 ```bash
 curl -X POST http://localhost:3000/rs256-login \
   -H "Content-Type: application/json" \

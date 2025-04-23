@@ -36,6 +36,12 @@ Object.entries(keyFiles).forEach(([key, value]) => {
 
 app.use(bodyParser.json());
 
+// Serve public.pem
+app.get("/public.pem", (req, res) => {
+  res.setHeader("Content-Type", "application/x-pem-file");
+  res.send(publicKey);
+});
+
 // In-memory user database (for demonstration purposes)
 const users = [{ id: 1, username: "admin", password: "admin123" }];
 
